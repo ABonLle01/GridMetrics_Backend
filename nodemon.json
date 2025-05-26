@@ -1,0 +1,10 @@
+{
+    "watch": ["./"],
+    "ignore": [
+      "gp_results/*",
+      "fastf1_cache/*",
+      "python_scripts/*.log",
+      "*.log"
+    ]
+  }
+  

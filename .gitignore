@@ -1,0 +1,50 @@
+# ============================
+# Node
+# ============================
+node_modules/
+npm-debug.log*
+
+# ============================
+# Python
+# ============================
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+python_scripts/*.ipynb
+
+# ============================
+# Environment
+# ============================
+.env
+
+# ============================
+# Logs
+# ============================
+*.log
+getSessions_processing.log
+updateQualy_processing.log
+updateRace_processing.log
+scheduler.log
+
+# ============================
+# Caches & Outputs
+# ============================
+fastf1_cache/
+gp_results/
+
+# ============================
+# Editor / IDE
+# ============================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ============================
+# OS Files
+# ============================
+.DS_Store
+Thumbs.db
