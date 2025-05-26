@@ -2,9 +2,13 @@ import os
 import fastf1
 from fastf1.core import DataNotLoadedError
 import pandas as pd
+from dotenv import load_dotenv
 from pymongo import MongoClient
 from datetime import datetime, timedelta
 import json
+
+load_dotenv()
+mongo_uri = os.getenv("MONGO_URI")
 
 with open('data.json', 'r', encoding='utf-8') as f:
     data = json.load(f)
@@ -14,8 +18,8 @@ cache_dir = os.path.join(os.getcwd(), 'fastf1_cache')  # Ruta absoluta
 os.makedirs(cache_dir, exist_ok=True)  # Crear carpeta si no existe
 fastf1.Cache.enable_cache(cache_dir)  # Habilitar caché
 
-client = MongoClient("mongodb+srv://alvaro:5uBHOQmiJeuQ9zCs@cluster0.hva0met.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-db = client.gridmetrics  # Nombre de tu base de datos
+client = MongoClient(mongo_uri)  # Conectar a MongoDB
+db = client.gridmetrics  # Nombre de la base de datos
 
 # Función auxiliar para formatear timedelta al formato mm:ss:fff
 def format_total_time(td: timedelta) -> str:
