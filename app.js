@@ -8,7 +8,7 @@ import { scheduleDynamicJobs } from './scheduler.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const URL = process.env.BACK_URL || `http://localhost:${PORT}`;
+const state = PORT === 5000 ? 'Desarrollo' : 'Produccion';
 
 app.use(cors());
 app.use(express.json());
@@ -18,6 +18,6 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB conectado');
     scheduleDynamicJobs();
-    app.listen(PORT, () => console.log(`Servidor en ${URL}`));
+    app.listen(PORT, () => console.log(`Estado del Servidor: en ${state}`));
   })
   .catch(err => console.error('Error de conexión a MongoDB:', err));
