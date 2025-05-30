@@ -200,32 +200,46 @@ export const getDriverRacesResults = async (req, res) => {
     const results = races
       .map(race => {
         const raceSession = race.sessions.find(s => s.name === 'Race');
-        if (!raceSession || !raceSession.session_result) return null;
+        const qualiSession = race.sessions.find(s => s.name === 'Qualifying');
 
-        // Busca la entrada del piloto en session_result
-        const entry = Object.values(raceSession.session_result)
+        if (!raceSession?.session_result || !qualiSession?.session_result) return null;
+
+        // Obtener resultado de la carrera
+        const raceEntry = Object.values(raceSession.session_result)
           .find(e => e.driver === driverId);
-        if (!entry) return null;
 
-        // Extrae posición y puntos
-        const rawPos = entry.position;
-        const position = typeof rawPos === 'object'
-          ? rawPos.Position ?? rawPos.$numberInt
-          : rawPos;
-        const points = entry.points ?? entry.points?.$numberInt ?? 0;
+        // Obtener resultado de clasificación
+        const qualiEntry = Object.values(qualiSession.session_result)
+          .find(e => e.driver === driverId);
+
+        if (!raceEntry || !qualiEntry) return null;
+
+        const rawFinalPos = raceEntry.position;
+        const finalPosition = typeof rawFinalPos === 'object'
+          ? rawFinalPos.Position ?? rawFinalPos.$numberInt
+          : rawFinalPos;
+
+        const rawQualiPos = qualiEntry.position;
+        const qualifyingPosition = typeof rawQualiPos === 'object'
+          ? rawQualiPos.Position ?? rawQualiPos.$numberInt
+          : rawQualiPos;
+
+        const points = raceEntry.points ?? raceEntry.points?.$numberInt ?? 0;
 
         return {
           raceId: race._id,
           raceName: race.name,
           date: race.date,
           circuit: race.circuit,
-          position: Number(position),
+          qualifyingPosition: Number(qualifyingPosition),
+          finalPosition: Number(finalPosition),
           points: Number(points),
-          status: entry.status
+          status: raceEntry.status
         };
       })
-      .filter(Boolean) // elimina carreras donde no participó
+      .filter(Boolean)
       .sort((a, b) => new Date(a.date) - new Date(b.date));
+
 
     return res.json({
       driverId: driver._id,
