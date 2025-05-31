@@ -139,6 +139,7 @@ export const getScheduleCircuitInfo = async (req, res) => {
 export const updateSesionsByRound = async (req, res) => {
   const { year, round } = req.params;
   const baseUrl = `${URL}api/scripts`;
+  console.log(baseUrl)
 
   try {
     // 0) Primero, lanza la generación de los JSON

@@ -10,7 +10,13 @@ const __dirname = dirname(__filename);
 export const process_sessions = (req, res) => {
   const { year, round } = req.params;
   const scriptPath = path.join(__dirname, '..', 'python_scripts', 'get_sessions.py');
-  const pythonPath = path.join(__dirname, '..', 'python_scripts', '.venv', 'Scripts', 'python.exe');
+  const isWindows = process.platform === 'win32';
+
+  const pythonPath = process.env.BACK_URL
+    ? 'python3'
+    : isWindows
+      ? path.join(__dirname, '..', 'python_scripts', '.venv', 'Scripts', 'python.exe')  // local en Windows
+      : path.join(__dirname, '..', 'python_scripts', '.venv', 'bin', 'python3');  // local en Linux/macOS
 
   const pythonProcess = spawn(
     pythonPath,
@@ -42,6 +48,9 @@ export const process_sessions = (req, res) => {
   });
   
   pythonProcess.on('error', (err) => {
+    if (responded) return;
+    responded = true;
+
     console.error('Failed to start subprocess.', err);
     res.status(500).json({ success: false, error: err.message });
   });  

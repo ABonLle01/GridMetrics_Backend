@@ -79,7 +79,7 @@ export async function scheduleDynamicJobs() {
         schedule.scheduleJob(runDate, async () => {
           logger.info(`[${sessionKey}] Ejecutando ${endpoint} para year=${moment(raceDate).year()}, round=${round}`);
           try {
-            await axios.post(`${URL}/api/race/${endpoint}/${moment(raceDate).year()}/${round}`);
+            await axios.post(`${URL}/api/race/${endpoint}/2025/${round}`);
             logger.info(`[${sessionKey}] ${endpoint} completado`);
           } catch (err) {
             logger.error(`[${sessionKey}] Error en ${endpoint}: ${err.response?.data || err.message}`);
