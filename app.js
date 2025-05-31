@@ -11,8 +11,7 @@ const PORT = process.env.PORT || 5000;
 const state = PORT === 5000 ? 'Desarrollo' : 'Producción';
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://gridmetrics-backend.onrender.com'],
-  credentials: true
+  origin: ['http://localhost:5173', 'https://gridmetrics-frontend.onrender.com'],
 }));
 
 app.use(express.json());
