@@ -17,7 +17,9 @@ app.use('/api', router);
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB conectado');
-    scheduleDynamicJobs();
+    scheduleDynamicJobs()
+    .then(() => console.log('Tareas programadas con éxito'))
+    .catch(err => console.error('Error al programar tareas:', err));
     app.listen(PORT, () => console.log(`Estado del Servidor: en ${state}`));
   })
   .catch(err => console.error('Error de conexión a MongoDB:', err));

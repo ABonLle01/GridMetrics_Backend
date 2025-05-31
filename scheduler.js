@@ -17,13 +17,22 @@ const logger = winston.createLogger({
   ),
   transports: [
     new winston.transports.File({ filename: 'scheduler.log' }),
-    new winston.transports.Console({ level: 'error' })
+    new winston.transports.Console()
   ]
 });
 
 mongoose.set('strictQuery', true);
 
 export async function scheduleDynamicJobs() {
+  logger.info('Ejecutando scheduleDynamicJobs');
+
+  const runDate = moment().add(1, 'minute').toDate();
+  schedule.scheduleJob(runDate, () => {
+    logger.info('Job de prueba ejecutado');
+  });
+  logger.info('Job de prueba agendado para dentro de 1 minuto');
+
+
   const now = moment();
   let totalScheduled = 0;
   
@@ -79,7 +88,7 @@ export async function scheduleDynamicJobs() {
         schedule.scheduleJob(runDate, async () => {
           logger.info(`[${sessionKey}] Ejecutando ${endpoint} para year=${moment(raceDate).year()}, round=${round}`);
           try {
-            await axios.post(`${URL}/api/race/${endpoint}/2025/${round}`);
+            await axios.get(`${URL}/api/race/${endpoint}/2025/${round}`);
             logger.info(`[${sessionKey}] ${endpoint} completado`);
           } catch (err) {
             logger.error(`[${sessionKey}] Error en ${endpoint}: ${err.response?.data || err.message}`);
