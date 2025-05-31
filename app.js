@@ -8,9 +8,13 @@ import { scheduleDynamicJobs } from './scheduler.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const state = PORT === 5000 ? 'Desarrollo' : 'Produccion';
+const state = PORT === 5000 ? 'Desarrollo' : 'Producción';
 
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://gridmetrics-backend.onrender.com'],
+  credentials: true
+}));
+
 app.use(express.json());
 app.use('/api', router);
 
@@ -18,8 +22,8 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB conectado');
     scheduleDynamicJobs()
-    .then(() => console.log('Tareas programadas con éxito'))
-    .catch(err => console.error('Error al programar tareas:', err));
+      .then(() => console.log('Tareas programadas con éxito'))
+      .catch(err => console.error('Error al programar tareas:', err));
     app.listen(PORT, () => console.log(`Estado del Servidor: en ${state}`));
   })
   .catch(err => console.error('Error de conexión a MongoDB:', err));
