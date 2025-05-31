@@ -24,14 +24,7 @@ const logger = winston.createLogger({
 mongoose.set('strictQuery', true);
 
 export async function scheduleDynamicJobs() {
-  logger.info('Ejecutando scheduleDynamicJobs');
-
-  const runDate = moment().add(1, 'minute').toDate();
-  schedule.scheduleJob(runDate, () => {
-    logger.info('Job de prueba ejecutado');
-  });
-  logger.info('Job de prueba agendado para dentro de 1 minuto');
-
+  logger.info('Ejecutando scheduleDynamicJobs:');
 
   const now = moment();
   let totalScheduled = 0;
