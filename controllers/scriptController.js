@@ -18,7 +18,7 @@ const getPythonPath = () => {
 
 const runPythonScript = async (scriptFile, args = [], expectJson = false, jsonPath = '') => {
   const pythonPath = getPythonPath();
-  const scriptPath = path.join(__dirname, 'python_scripts', scriptFile);
+  const scriptPath = path.join(__dirname, '..', 'python_scripts', scriptFile);
 
   return new Promise((resolve, reject) => {
     const py = spawn(pythonPath, [scriptPath, ...args]);
@@ -52,6 +52,7 @@ const runPythonScript = async (scriptFile, args = [], expectJson = false, jsonPa
   });
 };
 
+
 export const process_sessions = async (req, res) => {
   const { year, round } = req.params;
 
@@ -66,7 +67,8 @@ export const process_sessions = async (req, res) => {
 
 export const get_qualifying = async (req, res) => {
   const { year, round } = req.params;
-  const jsonPath = path.join(__dirname, 'gp_results', year, round, 'qualifying.json');
+  const jsonPath = path.join(__dirname, '..', 'gp_results', year, round, 'qualifying.json');
+
 
   try {
     const data = await runPythonScript('get_qualifying_main.py', [year, round], true, jsonPath);
@@ -79,7 +81,7 @@ export const get_qualifying = async (req, res) => {
 
 export const get_race = async (req, res) => {
   const { year, round } = req.params;
-  const jsonPath = path.join(__dirname, 'gp_results', year, round, 'race.json');
+  const jsonPath = path.join(__dirname, '..', 'gp_results', year, round, 'race.json');
 
   try {
     const data = await runPythonScript('get_race_main.py', [year, round], true, jsonPath);
