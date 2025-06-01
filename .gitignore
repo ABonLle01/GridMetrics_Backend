@@ -48,3 +48,6 @@ gp_results/
 # ============================
 .DS_Store
 Thumbs.db
+
+
+controllers/_scriptController.js
