@@ -202,7 +202,7 @@ export const getDriverRacesResults = async (req, res) => {
         const raceSession = race.sessions.find(s => s.name === 'Race');
         const qualiSession = race.sessions.find(s => s.name === 'Qualifying');
 
-        if (!raceSession?.session_result || !qualiSession?.session_result) return null;
+        if (!raceSession?.session_result) return null;
 
         // Obtener resultado de la carrera
         const raceEntry = Object.values(raceSession.session_result)
@@ -212,14 +212,14 @@ export const getDriverRacesResults = async (req, res) => {
         const qualiEntry = Object.values(qualiSession.session_result)
           .find(e => e.driver === driverId);
 
-        if (!raceEntry || !qualiEntry) return null;
+        if (!raceEntry) return null;
 
         const rawFinalPos = raceEntry.position;
         const finalPosition = typeof rawFinalPos === 'object'
           ? rawFinalPos.Position ?? rawFinalPos.$numberInt
           : rawFinalPos;
 
-        const rawQualiPos = qualiEntry.position;
+        const rawQualiPos = qualiEntry?.position;
         const qualifyingPosition = typeof rawQualiPos === 'object'
           ? rawQualiPos.Position ?? rawQualiPos.$numberInt
           : rawQualiPos;
@@ -231,7 +231,7 @@ export const getDriverRacesResults = async (req, res) => {
           raceName: race.name,
           date: race.date,
           circuit: race.circuit,
-          qualifyingPosition: Number(qualifyingPosition),
+          qualifyingPosition: Number(qualifyingPosition) || null,
           finalPosition: Number(finalPosition),
           points: Number(points),
           status: raceEntry.status
