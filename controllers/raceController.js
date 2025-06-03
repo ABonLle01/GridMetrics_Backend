@@ -255,8 +255,8 @@ export const updateQualyfingByRound = async (req, res) => {
 };
 
 export const updateRaceByRound = async (req, res) => {
-    const { year, round } = req.params;
-  const baseUrl = `${URL}/api/scripts`;
+  const { year, round } = req.params;
+  const baseUrl = `${URL}api/scripts`;
 
   try {
     // 1) Ejecutar el script que genera el archivo JSON de qualy
@@ -264,13 +264,13 @@ export const updateRaceByRound = async (req, res) => {
       await axios.get(`${baseUrl}/updateRace/${year}/${round}`);
       /* console.log("Script ejecutado correctamente"); */
     } catch (axiosErr) {
-      console.error("Fallo al ejecutar script de qualifying:");
+      console.error("Fallo al ejecutar script de updateRace:");
       console.error("Status:", axiosErr.response?.status);
       console.error("Data:", axiosErr.response?.data);
       console.error("Mensaje:", axiosErr.message);
 
       return res.status(500).json({
-        error: 'Fallo al ejecutar script de qualifying',
+        error: 'Fallo al ejecutar script de updateRace',
         details: axiosErr.response?.data || axiosErr.message,
       });
     }
