@@ -252,3 +252,44 @@ export const getDriverRacesResults = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+export const createDriver = async (req, res) => {
+  try {
+    const newDriver = new Driver(req.body);
+    await newDriver.save();
+    res.status(201).json(newDriver);
+  } catch (error) {
+    console.error('Error creando piloto:', error);
+    res.status(500).json({ message: 'Error creando piloto' });
+  }
+};
+
+// Actualizar piloto por ID
+export const updateDriverById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const updatedDriver = await Driver.findByIdAndUpdate(id, req.body, { new: true });
+    if (!updatedDriver) {
+      return res.status(404).json({ message: 'Piloto no encontrado' });
+    }
+    res.json(updatedDriver);
+  } catch (error) {
+    console.error('Error actualizando piloto:', error);
+    res.status(500).json({ message: 'Error actualizando piloto' });
+  }
+};
+
+// Borrar piloto por ID
+export const deleteDriverById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedDriver = await Driver.findByIdAndDelete(id);
+    if (!deletedDriver) {
+      return res.status(404).json({ message: 'Piloto no encontrado' });
+    }
+    res.json({ message: 'Piloto eliminado correctamente' });
+  } catch (error) {
+    console.error('Error borrando piloto:', error);
+    res.status(500).json({ message: 'Error borrando piloto' });
+  }
+};
